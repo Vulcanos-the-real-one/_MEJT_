@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Redeem a Code — MEJT</title>
+<meta name="description" content="Redeem your VIP or MVP code for the MEJT Minecraft server." />
+<link rel="canonical" href="https://mejt.bunix.de/redeem.html" />
+<meta name="robots" content="noindex, follow" />
+
+<meta name="theme-color" content="#050308" />
+<link rel="icon" href="/images/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/images/icon-180.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<a class="visually-hidden" href="#main">Skip to content</a>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="/">
+      <img src="/images/icon-192.png" alt="" width="38" height="38" />
+      MEJT
+    </a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/#ranks">Ranks</a>
+      <a href="/#join">Join</a>
+      <a href="/redeem.html">Redeem Code</a>
+      <a href="/agb.html">Terms</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-outline" href="/">Back home</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu">
+    <a href="/#features">Features</a>
+    <a href="/#ranks">Ranks</a>
+    <a href="/#join">Join</a>
+    <a href="/redeem.html">Redeem Code</a>
+    <a href="/agb.html">Terms</a>
+    <a class="btn btn-primary" href="/">Back home</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section style="padding-top: 70px;">
+    <div class="container">
+      <div class="redeem-shell reveal in">
+        <svg class="redeem-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M32 4l6.5 13.5L54 20l-11 10.7L45.5 46 32 38.5 18.5 46 21 30.7 10 20l15.5-2.5L32 4z" fill="#fd00f3" opacity=".9"/>
+        </svg>
+        <h1 style="font-size: var(--step-2); margin-bottom: 8px;">Redeem your code</h1>
+        <p style="color: var(--text-dim); font-size: .95rem;">Got a VIP or MVP code? Enter it below along with your Minecraft username.</p>
+
+        <div id="setup-notice" hidden style="margin-top:18px; padding:14px 16px; border-radius:10px; background:rgba(255,77,94,.1); border:1px solid var(--red); color:#ffb3ba; font-size:.85rem; text-align:left;">
+          The redeem system isn't connected to a database yet. If you're the server admin, see <code>README.md</code> to finish the Firebase setup.
+        </div>
+
+        <form id="redeem-form" novalidate>
+          <label class="field-label" for="code-input">Your code</label>
+          <input id="code-input" class="code-slot" type="text" placeholder="VIP-XXXX-XXXX" autocomplete="off" maxlength="20" required />
+
+          <label class="field-label" for="name-input">Minecraft username</label>
+          <input id="name-input" class="name-input" type="text" placeholder="Notch" autocomplete="off" maxlength="24" required />
+
+          <button id="redeem-submit" class="btn btn-primary btn-block" type="submit" style="margin-top: 10px;">Redeem</button>
+          <p id="redeem-msg" class="redeem-msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <div id="redeem-result" class="redeem-result"></div>
+      </div>
+
+      <p class="center badge-soon mt-lg">Don't have a code yet? Check the <a href="/#ranks" style="color: var(--text-dim); text-decoration: underline;">Ranks</a> section for how to get one.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© <span data-year></span> MEJT Minecraft Server</span>
+      <a href="/agb.html" style="color: var(--text-dim);">Terms &amp; Conditions</a>
+    </div>
+  </div>
+</footer>
+
+<div id="confetti-layer"></div>
+
+<script src="/js/main.js" defer></script>
+<script type="module" src="/js/redeem.js"></script>
+</body>
+</html>

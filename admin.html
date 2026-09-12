@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin — MEJT</title>
+<meta name="robots" content="noindex, nofollow" />
+
+<meta name="theme-color" content="#050308" />
+<link rel="icon" href="/images/favicon.ico" sizes="any" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="/">
+      <img src="/images/icon-192.png" alt="" width="38" height="38" />
+      MEJT <span style="color: var(--text-faint); font-weight: 500; font-size: .85rem; margin-left: 4px;">/ admin</span>
+    </a>
+    <div class="nav-cta">
+      <a class="btn btn-outline" href="/">Back to site</a>
+      <button id="sign-out" class="btn btn-outline" style="display:none;">Sign out</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section style="padding-top: 60px;">
+    <div class="container">
+
+      <div id="admin-setup-notice" hidden style="max-width:560px; margin:0 auto 30px; padding:16px 18px; border-radius:10px; background:rgba(255,77,94,.1); border:1px solid var(--red); color:#ffb3ba; font-size:.9rem;">
+        Firebase isn't configured yet. Open <code>js/firebase-init.js</code> and follow the steps in <code>README.md</code> before this dashboard will work.
+      </div>
+
+      <div id="admin-lock" class="admin-lock">
+        <h2>Admin sign-in</h2>
+        <p>This is where you generate and track VIP / MVP codes. Only the server owner should have login credentials — see README.md for how to create them.</p>
+        <form id="login-form">
+          <div class="form-field">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" required autocomplete="username" />
+          </div>
+          <div class="form-field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" required autocomplete="current-password" />
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+          <p id="login-error" style="color: var(--red); font-size: .85rem; margin-top: 12px;"></p>
+        </form>
+      </div>
+
+      <div id="admin-dash" class="admin-dash">
+        <div class="admin-topbar">
+          <div>
+            <h1 style="font-size: var(--step-2);">Code manager</h1>
+            <p style="color: var(--text-dim); font-size: .92rem;">Generate codes, hand them out, and watch redemptions come in live.</p>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="panel-card">
+            <h3>Generate codes</h3>
+            <form id="generate-form">
+              <div class="form-field">
+                <label for="gen-tier">Tier</label>
+                <select id="gen-tier">
+                  <option value="VIP">VIP</option>
+                  <option value="MVP">MVP</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="gen-qty">Quantity</label>
+                <input id="gen-qty" type="number" min="1" max="50" value="1" />
+              </div>
+              <div class="form-field">
+                <label for="gen-expiry">Expires after (days — optional)</label>
+                <input id="gen-expiry" type="number" min="1" placeholder="Never expires" />
+              </div>
+              <div class="form-field">
+                <label for="gen-note">Note (optional, admin-only)</label>
+                <input id="gen-note" type="text" placeholder="e.g. Giveaway stream Oct 2026" maxlength="80" />
+              </div>
+              <button id="generate-submit" class="btn btn-primary btn-block" type="submit">Generate codes</button>
+            </form>
+            <div id="generated-list" class="generated-list"></div>
+            <button id="copy-generated" class="btn btn-outline btn-block" style="margin-top:10px;" type="button">Copy all to clipboard</button>
+          </div>
+
+          <div class="panel-card">
+            <h3>All codes</h3>
+            <div class="toolbar">
+              <input id="codes-search" type="text" placeholder="Search by code or player…" />
+            </div>
+            <div class="codes-table-wrap">
+              <table class="codes-table">
+                <thead>
+                  <tr><th>Code</th><th>Tier</th><th>Status</th><th>Redeemed by</th><th>Created</th></tr>
+                </thead>
+                <tbody id="codes-tbody"></tbody>
+              </table>
+              <p id="codes-empty" style="color: var(--text-dim); padding: 20px 0; text-align: center;" hidden>No codes yet — generate some on the left.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<script type="module">
+  import { auth, isConfigured } from "/js/firebase-init.js";
+  import { signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  const signOutBtn = document.getElementById("sign-out");
+  if (isConfigured) {
+    import("https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js").then(({ onAuthStateChanged }) => {
+      onAuthStateChanged(auth, (user) => { signOutBtn.style.display = user ? "inline-flex" : "none"; });
+    });
+    signOutBtn.addEventListener("click", () => signOut(auth));
+  }
+</script>
+<script type="module" src="/js/admin.js"></script>
+</body>
+</html>

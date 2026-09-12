@@ -1,0 +1,40 @@
+rules_version = '2';
+
+// Paste this whole file into: Firebase Console → Firestore Database → Rules.
+//
+// How it protects the voucher system:
+// - Nobody can list/browse the "codes" collection unless logged in as admin,
+//   so codes can't be scraped. A visitor can only read ONE code at a time,
+//   and only if they already know the exact code string (which is the doc ID).
+// - A code can only ever be updated to mark itself redeemed — its tier,
+//   creation date, and expiry can never be changed by a visitor.
+// - Only an authenticated user (you, signed in on /admin.html) can create
+//   new codes or read the full list.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /codes/{code} {
+
+      // Anyone can fetch a single code by its exact ID (needed to redeem it).
+      // Nobody can query/list the whole collection unless signed in.
+      allow get: if true;
+      allow list: if request.auth != null;
+
+      // Only signed-in admin can create or delete codes.
+      allow create, delete: if request.auth != null;
+
+      // A visitor may update a code ONLY to redeem it, and only if:
+      //  - it isn't already fully redeemed,
+      //  - the immutable fields (tier, createdAt, expiresAt, maxUses) are untouched,
+      //  - "uses" only ever increases by exactly 1.
+      allow update: if
+        resource.data.uses < resource.data.maxUses &&
+        request.resource.data.tier == resource.data.tier &&
+        request.resource.data.maxUses == resource.data.maxUses &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.expiresAt == resource.data.expiresAt &&
+        request.resource.data.uses == resource.data.uses + 1;
+    }
+  }
+}
